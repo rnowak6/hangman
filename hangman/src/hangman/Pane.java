@@ -30,29 +30,27 @@ public class Pane extends JFrame implements ActionListener {
  private JPanel southPanel;
  private JTextField textField;
  private LinePanel line;
- private String [] wordList = {"computer","java","activity","alaska","appearance","article",
-   "automobile","basket","birthday","canada","central","character","chicken","chosen",
-   "cutting","daily","darkness","diagram","disappear","driving","effort","establish","exact",
-   "establishment","fifteen","football","foreign","frequently","frighten","function","gradually",
-   "hurried","identity","importance","impossible","invented","italian","journey","lincoln",
-   "london","massage","minerals","outer","paint","particles","personal","physical","progress",
-   "quarter","recognise","replace","rhythm","situation","slightly","steady","stepped",
-   "strike","successful","sudden","terrible","traffic","unusual","volume","yesterday" };
+ public static String word="";
+ public static String genre;
+ public static String[][] answers = { 	 {"tomato", "apple", "kiwi", "orange", "asparagus", "radish", "carrot", "banana", "peach", "zucchini"},
+	                              	     {"dog", "kangaroo", "elephant", "giraffe", "panda", "crocodile", "hamster", "lemur", "jaguar", "aardvark"},
+	                                     {"illinois", "michigan", "mississippi", "montana", "kentucky", "arkansas", "alaska", "indiana", "nebraska", "california"} };
 
  public ArrayList<String> usedLetters = new ArrayList(); // list of used letter by user
  public ArrayList<String> correctLetters = new ArrayList();
  public String userInput = "";
 
  private int numLives = 6; // number of lives
- public String theWord; // the wrong which is chosen
+ 
  JButton exitButton;
  JButton playAgain;
 
  // no-argument constructor
  public Pane() { 
   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  theWord = pickWord();
-  correctLetters = new ArrayList(theWord.length());
+  pickWord(answers);
+  correctLetters = new ArrayList(word.length());
+  
   
 
   setSize(600,500);
@@ -61,7 +59,7 @@ public class Pane extends JFrame implements ActionListener {
   setLayout(new BorderLayout());
 
   centerPanel = new JPanel();
-  line = new LinePanel(15,theWord,usedLetters);
+  line = new LinePanel(15,word,usedLetters);
   centerPanel.setSize(500,500);
   centerPanel.setBackground(Color.WHITE);
   centerPanel.add(line);
@@ -82,13 +80,27 @@ public class Pane extends JFrame implements ActionListener {
   southPanel.add(textField);
   southPanel.add(exitButton);
   add(southPanel, BorderLayout.SOUTH);
+ 
 
  }
 
  // Picks a word, latter it will be picked randomly.
- private String pickWord(){
-  return wordList[0];
- }
+ private static void pickWord(String [][] a){
+	 int column = (int) (Math.random() * 3)  ;
+		int row = (int)(Math.random()* 9);
+		word = a[column][row];
+		word = word.toLowerCase();
+		if(column==0) {
+			genre = "Fruits/Vegetables";
+		}
+		else if(column==1) {
+			genre = "Animals";
+		} 
+		else {
+			genre = "States";
+		}
+	}
+ 
 
  // This method check wither the input is valid
  // i.e. its in the alphabet.
@@ -104,7 +116,7 @@ public class Pane extends JFrame implements ActionListener {
   }
   return false;
  }
-
+ 
  /**
   * 
   */
@@ -117,11 +129,11 @@ public class Pane extends JFrame implements ActionListener {
      checkInput(userInput) == true){
     usedLetters.add(userInput);
 
-    if (theWord.contains(userInput) == true){
+    if (word.contains(userInput) == true){
      correctLetters.add(userInput);
      centerPanel.removeAll();
 
-     line = new LinePanel(20,theWord,correctLetters);
+     line = new LinePanel(20,word,correctLetters);
      centerPanel.add(line);
      centerPanel.revalidate();
     }
@@ -130,7 +142,7 @@ public class Pane extends JFrame implements ActionListener {
      numLives = numLives - 1;
 
      centerPanel.removeAll();
-     line = new LinePanel(numLives,theWord,correctLetters);
+     line = new LinePanel(numLives,word,correctLetters);
 
      centerPanel.add(line);
      centerPanel.revalidate();
@@ -140,13 +152,13 @@ public class Pane extends JFrame implements ActionListener {
    else if (userInput.length() > 1)
     System.out.println("Enter a valid letter");
 
-   else if (userInput.length() == 1 && checkInput(userInput) == true && theWord.contains(userInput)){
+   else if (userInput.length() == 1 && checkInput(userInput) == true && word.contains(userInput)){
     correctLetters.add(userInput);
    }
 
    centerPanel.removeAll();
 
-   line = new LinePanel(20,theWord,usedLetters);
+   line = new LinePanel(20,word,usedLetters);
    centerPanel.add(line);
    centerPanel.revalidate();
   }  
@@ -174,7 +186,7 @@ public class Pane extends JFrame implements ActionListener {
    userInput = temp;
   }
   textField.selectAll();
-  if (checkWord(theWord, correctLetters) != true){
+  if (checkWord(word, correctLetters) != true){
    Play();
   }
 
