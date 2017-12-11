@@ -66,13 +66,13 @@ public class game {
 	public static boolean isCorrect(String a) {
 		a = a.toUpperCase();
 		int checker = correct;
-		for(int i = 0; i < split.length; i++) {
-			if(a.equals(split[i])) {
+		for(int i = 0; i < split.length-1; i++) {
+			if(a.equals(split[i].toUpperCase())) {
 				correct++;
-				right[i]=split[i]; //puts it in the array that is being displayed
+				right[i]=split[i].toUpperCase(); //puts it in the array that is being displayed
 			}
 		}
-		if(checker==correct) {
+		if(checker==correct) { //checks if the correct amount increased and if it hadn't then it was wrong.
 			wrong++;
 			return false;
 		}
@@ -85,11 +85,12 @@ public class game {
 	{
 		newWord(answers);
 		System.out.println(genre);
+		System.out.println(word);
 		Scanner scan = new Scanner(System.in);
 		while(correct<word.length()) {
 			String guess = scan.nextLine().toUpperCase();
-			if(addLetter(guess)) {
-				if(isCorrect(guess)) {
+			if(addLetter(guess)==true) {
+				if(isCorrect(guess)==true) {
 					System.out.println("Yay! You guessed a letter right!");
 					for(int i = 0; i<right.length; i++) {
 						System.out.print(right[i]+" ");
