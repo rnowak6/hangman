@@ -110,7 +110,7 @@ public class Pane extends JFrame implements ActionListener {
     "q","r","s","t","u","v","w","x","y","z"};
 
   for (int i = 0; i < alphabet.length; i++){
-   if (s.equals(alphabet[i]) && s.length() <= 1){
+   if ((s.equalsIgnoreCase(alphabet[i])) && s.length() <= 1){
     return true;
    }
   }
